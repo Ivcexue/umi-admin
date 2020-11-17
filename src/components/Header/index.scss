@@ -1,0 +1,28 @@
+.menu {
+  :global(.anticon) {
+    margin-right: 0;
+  }
+  // :global(.ant-dropdown-menu-item) {
+  //   min-width: 160px;
+  // }
+}
+.avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+  img {
+    width: 100%;
+  }
+}
+.dropdown {
+  display: flex;
+  align-items: center;
+}
+.line {
+  border-bottom: 1px solid #eeeeee;
+}
+

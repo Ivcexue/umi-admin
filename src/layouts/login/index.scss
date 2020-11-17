@@ -1,0 +1,65 @@
+$color: #0e74ff;
+.content_warper {
+  height: 100vh;
+  background: url('../../assets/images/login-bg.png') center center no-repeat;
+  .logo {
+    width: 50%;
+    height: 100px;
+    position: absolute;
+    left: 50px;
+    top: 35px;
+    background: url('../../assets//images/logo.png') no-repeat;
+  }
+  .card {
+    width: 430px;
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    .header_panel {
+      text-align: center;
+      span {
+        color: #333333;
+        font-size: 15px;
+        cursor: pointer;
+        &:first-child {
+          &::after {
+            content: '';
+            width: 2px;
+            height: 20px;
+            background-color: #333333;
+            margin: 24px;
+            padding: 1px;
+          }
+        }
+      }
+      .curent {
+        color: $color;
+      }
+    }
+    .login_form {
+      margin-top: 30px;
+    }
+    .register_btn {
+      width: 100%;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .rightoutlined {
+        font-size: 11px;
+        margin-top: 3px;
+        color: $color;
+      }
+    }
+    .sendCodeBtn {
+      margin-left: -4px;
+    }
+    h3 {
+      text-align: center;
+    }
+  }
+}
