@@ -19,7 +19,8 @@ export default class Itable extends Component {
       pagination: {
         current: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
+        showTotal: 100
       },
       pageNum: 0,
       ...props

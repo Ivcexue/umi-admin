@@ -1,17 +1,20 @@
 import React, { Component, createRef } from 'react'
-import { Space, Layout, Button, Modal, message, DatePicker, ConfigProvider, Input } from 'antd'
 import zh_CN from 'antd/lib/locale-provider/zh_CN'
-import { ExclamationCircleOutlined, SearchOutlined, ReloadOutlined } from '@ant-design/icons'
+
+import { Space, Layout, Button,  message, DatePicker, ConfigProvider, Input } from 'antd'
+import { SearchOutlined, ReloadOutlined } from '@ant-design/icons'
+
 import Editrole from './Editrole'
-import ITable from '@/components/Base/ITable'
 import Rolepermissions from './Rolepermissions'
+import ITable from '@/components/Base/ITable'
+import ButtonConfirm from '@/components/Base/ButtonConfirm'
+
 import { delRole, getMenuProMissIons, changeRoleState } from '@/api/role'
 import { ROLE_LIST_API } from '@/api/table/role'
 
 import styles from './index.scss'
 
 const { Content } = Layout
-const { confirm } = Modal
 const { RangePicker } = DatePicker
 
 const itableRef = createRef()
@@ -34,37 +37,20 @@ export default class RoleManag extends Component {
     })
   }
 
-  handleDeleteRole(record) {
-    confirm({
-      title: `是否确认删除角色 ${record.roleName}?`,
-      icon: <ExclamationCircleOutlined />,
-      okText: '确定',
-      okType: 'danger',
-      cancelText: '取消',
-      async onOk() {
-        let { status } = await delRole(record.roleId)
-        if (status) {
-          message.success('删除成功')
-          itableRef.current.refreshTableData()
-        }
-      }
-    })
+  async handleDeleteRole(record) {
+    let { status } = await delRole(record.roleId)
+    if (status) {
+      message.success('删除成功')
+      itableRef.current.refreshTableData()
+    }
   }
 
-  stopService = ({ roleName, roleId, status }) => {
-    confirm({
-      title: `是否确认${status === 0 ? '停用' : '启用'}角色 ${roleName}?`,
-      icon: <ExclamationCircleOutlined />,
-      okText: '确定',
-      cancelText: '取消',
-      async onOk() {
-        let data = await changeRoleState({ roleId, status: status === 0 ? -1 : 0 })
-        if (data.status) {
-          message.success(`${status === 0 ? '停用' : '启用'}角色 ${roleName}成功`)
-          itableRef.current.refreshTableData()
-        }
-      }
-    })
+  stopService = async ({ roleName, roleId, status }) => {
+    let data = await changeRoleState({ roleId, status: status === 0 ? -1 : 0 })
+    if (data.status) {
+      message.success(`${status === 0 ? '停用' : '启用'}角色 ${roleName}成功`)
+      itableRef.current.refreshTableData()
+    }
   }
 
   setVisible = (visible, type) => {
@@ -128,7 +114,6 @@ export default class RoleManag extends Component {
     const tableData = {
       url: ROLE_LIST_API,
       method: 'get',
-      scroll: { y: 540 },
       columns: [
         {
           title: '角色名称',
@@ -150,6 +135,7 @@ export default class RoleManag extends Component {
           align: 'center',
           render: record => {
             let isSuperAdmin = record.roleId === '20200929092157187777777'
+            let btnClass = () => (!isSuperAdmin ? styles.control_btn : '')
             return (
               <Space size="middle">
                 <Button
@@ -166,20 +152,18 @@ export default class RoleManag extends Component {
                 >
                   角色权限
                 </Button>
-                <Button
-                  className={styles.control_btn}
+                <ButtonConfirm
+                  className={btnClass()}
                   disabled={isSuperAdmin}
+                  text={`${record.status === -1 ? '启用' : '停用'}`}
+                  title={`确定${record.status === -1 ? '启用' : '停用'}吗?`}
                   onClick={() => this.stopService(record)}
-                >
-                  {record.status === -1 ? '启用' : '停用'}
-                </Button>
-                <Button
-                  className={styles.control_btn}
+                />
+                <ButtonConfirm
+                  className={btnClass()}
                   disabled={isSuperAdmin}
                   onClick={() => this.handleDeleteRole(record)}
-                >
-                  删除
-                </Button>
+                />
               </Space>
             )
           }

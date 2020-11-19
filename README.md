@@ -18,3 +18,19 @@ yarn install or yarn
 开发环境: yarn build:dev
 生产环境: yarn build:prod
 ```
+
+### Base组件使用介绍
+
+**ITable**
+```
+Table组件封装
+
+Author: ives-xue
+
+引入: 
+
+import ITable from '@/components/Base/ITable'
+
+<ITable tableData={tableData}/>
+
+```

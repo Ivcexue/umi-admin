@@ -2,21 +2,25 @@ import React from 'react'
 import { Button, Popconfirm } from 'antd'
 
 function ButtonConfirm(props) {
-  const { onClick, text = '删除', title = '确认删除吗?' } = props
-
-  // if (type !== 'del') return <Button {...props}></Button>
+  const { onClick, text = '删除', title = '确认删除吗?', disabled } = props
 
   const style = { width: 200 }
 
   const attr = {
     title,
     style,
-    onConfirm: onClick
+    disabled,
+    onConfirm: onClick,
+    okText: '确定',
+    cancelText: '取消'
   }
 
   return (
     <Popconfirm {...attr}>
-      <Button type="danger" {...props} onClick={e => e.preventDefault()}>
+      <Button
+        {...props}
+        onClick={e => e.preventDefault()}
+      >
         {text}
       </Button>
     </Popconfirm>
@@ -26,6 +30,3 @@ function ButtonConfirm(props) {
 ButtonConfirm.propTypes = {}
 
 export default ButtonConfirm
-
-// /components/index.js
-export { default as ButtonConfirm } from './BtnConfirm.js'
