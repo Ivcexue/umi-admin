@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+// import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { Link } from 'umi'
 import Redirect from 'umi/redirect'
 import { Layout, Menu, Breadcrumb } from 'antd';
@@ -22,7 +22,7 @@ class BasicLayout extends Component {
 
   getAuthRoutes = async () => {
     let { data, status } = await getRoutes()
-    if(data) {
+    if (data) {
       if (status) {
         this.setState({
           menuData: data
@@ -53,7 +53,7 @@ class BasicLayout extends Component {
 
   render() {
     const { collapsed, menuData } = this.state
-    const { children, location } = this.props
+    const { children } = this.props
 
     return (
       getToken() ?
@@ -95,11 +95,12 @@ class BasicLayout extends Component {
                 <Breadcrumb.Item>首页</Breadcrumb.Item>
               </Breadcrumb>
               {/* <Breadcrumbs /> */}
-              <TransitionGroup>
+              {children}
+              {/* <TransitionGroup>
                 <CSSTransition key={location.pathname} timeout={500}>
                   {children}
                 </CSSTransition>
-              </TransitionGroup>
+              </TransitionGroup> */}
             </Content>
           </Layout>
         </Layout >

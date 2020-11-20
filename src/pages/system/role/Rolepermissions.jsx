@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Drawer, Tabs, Tree } from 'antd'
 import PropTypes from 'prop-types'
 
@@ -15,7 +15,7 @@ const Rolepermissions = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menu])
 
-  const initTreeData = menus => {
+  const initTreeData = useCallback(menus => {
     if (menus && menus.length > 0) {
       let initData = menus.map((item, index) => {
         item.title = item.label
@@ -28,7 +28,7 @@ const Rolepermissions = props => {
       })
       return initData
     }
-  }
+  }, [])
 
   const onClose = () => {
     setDraVisible(false)
