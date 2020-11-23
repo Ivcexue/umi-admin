@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Layout, Card, Form, Input, Button, Row, Col, message } from 'antd'
 import { UserOutlined, LockOutlined, RightOutlined } from '@ant-design/icons'
+import CountDown from '@/hooks/useCountDown'
 
 import { setToken } from '@/utils/auth'
 import { login, getCodeImg } from '@/api/login'
@@ -15,7 +16,6 @@ let interval = null
 export default function Login() {
   const [currentTab, setCurentTab] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [count, setCount] = useState(60)
   const [userAccount, setUserAccount] = useState(null)
 
   const rules = {
@@ -47,25 +47,11 @@ export default function Login() {
     router.push('/user/register')
   }
 
-  const countDown = () => {
-    if (interval) return
-    interval = setInterval(async () => {
-      await setCount(count => {
-        if (count === 0) {
-          clearInterval(interval)
-          interval = null
-        }
-        return count - 1
-      })
-    }, 1000)
-  }
-
   const sendCodeMessage = async () => {
     if (!userAccount) {
       message.warning('请输入手机号')
       return false
     }
-    if (count < 60 && count > 0) return false
 
     let { status } = await getCodeImg({
       sendTo: userAccount,
@@ -73,8 +59,8 @@ export default function Login() {
       type: 0
     })
     if (status) {
-      countDown()
       message.success('发送成功')
+      return 'success'
     }
   }
 
@@ -82,7 +68,11 @@ export default function Login() {
     if (currentTab === 0 && !panel) {
       return (
         <Form.Item name="userPassword" rules={rules.password}>
-          <Input prefix={<LockOutlined className="site-form-item-icon" />} type="password" placeholder="请输入密码" />
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="请输入密码"
+          />
         </Form.Item>
       )
     } else {
@@ -91,13 +81,15 @@ export default function Login() {
           <Row gutter={24}>
             <Col span={interval ? 14 : 16}>
               <Form.Item name="code" noStyle rules={rules.code}>
-                <Input prefix={<LockOutlined className="site-form-item-icon" />} type="number" placeholder="请输入验证码" />
+                <Input
+                  prefix={<LockOutlined className="site-form-item-icon" />}
+                  type="number"
+                  placeholder="请输入验证码"
+                />
               </Form.Item>
             </Col>
             <Col span={1}>
-              <Button className={styles.sendCodeBtn} onClick={sendCodeMessage}>
-                {interval ? `${count}秒重新发送` : '发送验证码'}
-              </Button>
+              <CountDown sendCodeMessage={sendCodeMessage} />
             </Col>
           </Row>
         </Form.Item>
@@ -120,7 +112,11 @@ export default function Login() {
           </div>
           <Form className={styles.login_form} onFinish={handleLogin}>
             <Form.Item name="userAccount" rules={rules.username}>
-              <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入手机号或邮箱" onChange={e => setUserAccount(e.target.value)} />
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="请输入手机号或邮箱"
+                onChange={e => setUserAccount(e.target.value)}
+              />
             </Form.Item>
             {loginInput()}
             <Form.Item>

@@ -1,5 +1,12 @@
 import request from '@/utils/request'
 
+// 注册
+export const register = data => {
+  return request({
+    method: 'post',
+    body: data
+  })('/api/eseal-usermanage/register')
+}
 
 // 登录
 export function login(params) {
