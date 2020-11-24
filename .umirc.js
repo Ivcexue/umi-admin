@@ -1,6 +1,6 @@
 import routes from './config/routes';
 import proxy from './config/proxy';
-const { REACT_APP_ENV } = process.env;
+const { UMI_ENV } = process.env;
 export default {
   treeShaking: true,
   routes,
@@ -29,6 +29,6 @@ export default {
       },
     ],
   ],
-  proxy: proxy[REACT_APP_ENV || 'dev'],
+  proxy: proxy[UMI_ENV || 'dev'],
 };
 
